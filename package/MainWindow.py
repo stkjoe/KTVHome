@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
 from .OverlayTop import OverlayTop
+from .OverlayBottom import OverlayBottom
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -12,9 +13,11 @@ class MainWindow(QMainWindow):
 
         # Create overlays of the application
         self.overlayTop = OverlayTop(self)
+        self.overlayBottom = OverlayBottom(self)
 
         # Add overlays to layout
         self.layout.addWidget(self.overlayTop, 0, 0)
+        self.layout.addWidget(self.overlayBottom, 1, 0)
 
         # Create widget, then set layout to widget which gets added as central widget
         window = QWidget()
