@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
 from .OverlayTop import OverlayTop
 from .OverlayBottom import OverlayBottom
+from .WindowHome import WindowHome
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -17,7 +18,11 @@ class MainWindow(QMainWindow):
 
         # Add overlays to layout
         self.layout.addWidget(self.overlayTop, 0, 0)
-        self.layout.addWidget(self.overlayBottom, 1, 0)
+        self.layout.addWidget(self.overlayBottom, 2, 0)
+
+        # Create home page then add to layout
+        self.content = WindowHome()
+        self.layout.addWidget(self.content, 1, 0)
 
         # Create widget, then set layout to widget which gets added as central widget
         window = QWidget()
@@ -33,3 +38,11 @@ class MainWindow(QMainWindow):
             # TODO: Change the join bit when adding universal settings
             msg = "          ".join(msg)
         self.overlayTop.marqueeText.setText(msg)
+
+    def changeWindow(self, widget):
+        # removes the widget from the middle, then add a new one
+        self.layout.removeWidget(self.content)
+        self.content.close()
+        self.content = widget
+        self.layout.addWidget(self.content, 1, 0)
+        self.layout.update()
