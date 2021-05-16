@@ -7,6 +7,9 @@ class OverlayBottom(QWidget):
         QWidget.__init__(self)
         self.setParent(parent)
 
+        # Set the colour of the overlay
+        self.setStyleSheet("QWidget { background-color: rgba(255, 255, 255, 0.05)}")
+
         # Set OverlayBottom heights
         # TODO: Change heights with increasing resolution
         self.setFixedHeight(100)
@@ -22,6 +25,8 @@ class OverlayBottom(QWidget):
         for i in args:
             button = QToolButton()
             button.setIcon(QIcon("icons/{}.svg".format(i)))
+            button.setAutoRaise(True)
+            button.setStyleSheet("QToolButton:pressed { background-color: rgba(255, 255, 255, 0.1)}")
             buttons.append(button)
 
         # TODO: Solve this. Lambda functions cannot be used in loops. This is a stupid workaround

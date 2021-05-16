@@ -21,6 +21,7 @@ class WindowHome(QWidget):
         button = self.HomeButton(self)
         button.setIcon("icons/search-1.svg")
         button.setText("搜索全部/Search")
+        button.setColour(0, 152, 213)
         button.clicked.connect(lambda: self.buttonAction("title"))
         layout.addWidget(button, 0, 0, 2, 2)
         
@@ -28,6 +29,7 @@ class WindowHome(QWidget):
         button = self.HomeButton(self)
         button.setIcon("icons/compact-disc.svg")
         button.setText("搜索歌手/Artist Search")
+        button.setColour(231, 149, 38)
         button.clicked.connect(lambda: self.buttonAction("artist"))
         layout.addWidget(button, 2, 0, 1, 1)
 
@@ -35,6 +37,7 @@ class WindowHome(QWidget):
         button = self.HomeButton(self)
         button.setIcon("icons/worldwide.svg")
         button.setText("搜索语言/Language Search")
+        button.setColour(144, 188, 53)
         button.clicked.connect(lambda: self.buttonAction("language"))
         layout.addWidget(button, 2, 1, 1, 1)
         
@@ -42,6 +45,7 @@ class WindowHome(QWidget):
         button = self.HomeButton(self)
         button.setIcon("icons/music-player-2.svg")
         button.setText("播放清单/Playlists")
+        button.setColour(114, 81, 140)
         button.clicked.connect(lambda: self.buttonAction("playlists"))
         layout.addWidget(button, 0, 2, 1, 2)
 
@@ -49,6 +53,7 @@ class WindowHome(QWidget):
         button = self.HomeButton(self)
         button.setIcon("icons/star.svg")
         button.setText("最喜欢的/Favourites")
+        button.setColour(213, 52, 34)
         button.clicked.connect(lambda: self.buttonAction("favourites"))
         layout.addWidget(button, 1, 2, 2, 1)
 
@@ -56,6 +61,7 @@ class WindowHome(QWidget):
         button = self.HomeButton(self)
         button.setIcon("icons/windows.svg")
         button.setText("排队的歌曲/Queue List")
+        button.setColour(2, 93, 157)
         button.clicked.connect(lambda: self.buttonAction("queue"))
         layout.addWidget(button, 1, 3, 1, 1)
 
@@ -63,6 +69,7 @@ class WindowHome(QWidget):
         button = self.HomeButton(self)
         button.setIcon("icons/notebook-2.svg")
         button.setText("统计数据/Statistics")
+        button.setColour(76, 147, 115)
         button.clicked.connect(lambda: self.buttonAction("statistics"))
         layout.addWidget(button, 2, 3, 1, 1)
 
@@ -114,6 +121,7 @@ class WindowHome(QWidget):
 
             # Button formatting
             self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.setAutoRaise(True)
 
             # Icon part of the button
             self.icon = QLabel()
@@ -125,6 +133,8 @@ class WindowHome(QWidget):
             # Initialise label
             self.text = QLabel()
             self.text.setAlignment(Qt.AlignBottom)
+            # TODO: Change colour with universal theme
+            self.text.setStyleSheet("color: white")
             # Add font styling
             font = QFont()
             font.setPixelSize(15)

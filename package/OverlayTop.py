@@ -7,6 +7,9 @@ class OverlayTop(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self)
         self.setParent(parent)
+        
+        # Set the colour of the overlay
+        self.setStyleSheet("QWidget { background-color: rgba(255, 255, 255, 0.05)}")
 
         # Set OverlayTop heights
         # TODO: Change heights with increasing resolution
@@ -38,6 +41,8 @@ class OverlayTop(QWidget):
         self.button.setFixedSize(100, 50)
         self.button.setIcon(QIcon("icons/search-1.svg"))
         self.button.setIconSize(QSize(30, 30))
+        self.button.setAutoRaise(True)
+        self.button.setStyleSheet("QToolButton:pressed { background-color: rgba(255, 255, 255, 0.1)}")
         # TODO: Connect button clicked action to search action
         # button.clicked.connect()
 
@@ -57,8 +62,8 @@ class OverlayTop(QWidget):
             # TODO: Scale times with app resize
             x.setFixedWidth(100)
             x.setAlignment(Qt.AlignCenter)
-            x.setAttribute(Qt.WA_TranslucentBackground)
             x.setFont(font)
+            x.setStyleSheet("color: rgb(255, 255, 255)")
 
         # Start the elapsedTime timer
         timer = QTimer(self)
@@ -77,6 +82,9 @@ class OverlayTop(QWidget):
         def __init__(self, parent=None):
             QScrollArea.__init__(self)
             self.setParent(parent)
+
+            # Set the background colour of the marquee text to white
+            self.setStyleSheet("QScrollArea { background-color: rgba(255, 255, 255, 1)}")
 
             # Initialise the base label and text
             self.label = QLabel()

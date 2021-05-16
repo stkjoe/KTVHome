@@ -7,6 +7,9 @@ class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
 
+        # Set the colour of the window
+        self.setStyleSheet("MainWindow { background-color: rgb(25, 33, 60)}")
+
         # Create layout and set margins/spacings
         self.layout = QGridLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
