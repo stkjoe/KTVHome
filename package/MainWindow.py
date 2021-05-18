@@ -2,10 +2,14 @@ from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
 from .OverlayTop import OverlayTop
 from .OverlayBottom import OverlayBottom
 from .WindowHome import WindowHome
+from package.DatabaseAccess import startUp
 
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
+
+        # Database startup
+        startUp()
 
         # Set the colour of the window
         self.setStyleSheet("MainWindow { background-color: rgb(25, 33, 60)}")

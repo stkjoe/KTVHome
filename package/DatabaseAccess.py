@@ -24,7 +24,7 @@ def fetchResults(executeLine):
 def startUp():
     conn = connect()
     cur = conn.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS language (
+    cur.execute('''CREATE TABLE IF NOT EXISTS languages (
                     language_id INTEGER NOT NULL,
                     language_name TEXT NOT NULL,
                     language_path TEXT,
@@ -86,17 +86,11 @@ def getSongArtists(keyword, language=""):
         ))
 
 # Function for all titles
-def getSongTitles(keyword, artist="", language=""):
-    return fetchResults("SELECT 'songs', * FROM songs WHERE title LIKE '%{}%'{}{}".format(
+def getSongTitles(keyword, artist="", playlist=""):
+    return fetchResults("SELECT 'songs', * FROM songs WHERE song_title LIKE '%{}%'{}{}".format(
         keyword,
         " AND artist_id = {}".format(artist) if artist != "" else "",
-        " AND language_id = {}".format(language) if language != "" else ""
-        ))
-
-# Function for songs of a playlist
-def getPlaylistSongs(keyword):
-    return fetchResults("SELECT 'songs', * FROM songs WHERE song_id IN (SELECT song_id FROM playlist_videos WHERE playlist_id = {})".format(
-        keyword
+        " AND WHERE song_id IN (SELECT song_id FROM playlist_videos WHERE playlist_id = {}".format(playlist) if artist != "" else ""
         ))
 
 # Function for all playlists
@@ -107,6 +101,6 @@ def getPlaylists(keyword):
 
 # Function for all favourited songs
 def getFavourites(keyword):
-    return fetchResults("SELECT 'songs', * FROM songs WHERE favourites = 1 AND title LIKE '%{}%'".format(
+    return fetchResults("SELECT 'songs', * FROM songs WHERE favourited = 1 AND song_title LIKE '%{}%'".format(
         keyword
         ))

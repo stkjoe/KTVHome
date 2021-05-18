@@ -1,6 +1,7 @@
+from package.SearchTemplate import SearchTemplate
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QPixmap
-from PySide6.QtWidgets import QGridLayout, QLabel, QSizePolicy, QToolButton, QWidget
+from PySide6.QtWidgets import QGridLayout, QLabel, QSizePolicy, QStackedWidget, QToolButton, QWidget
 
 class WindowHome(QWidget):
     def __init__(self, parent=None):
@@ -46,7 +47,7 @@ class WindowHome(QWidget):
         button.setIcon("icons/music-player-2.svg")
         button.setText("播放清单/Playlists")
         button.setColour(114, 81, 140)
-        button.clicked.connect(lambda: self.buttonAction("playlists"))
+        button.clicked.connect(lambda: self.buttonAction("playlist"))
         layout.addWidget(button, 0, 2, 1, 2)
 
         # Favourites
@@ -54,7 +55,7 @@ class WindowHome(QWidget):
         button.setIcon("icons/star.svg")
         button.setText("最喜欢的/Favourites")
         button.setColour(213, 52, 34)
-        button.clicked.connect(lambda: self.buttonAction("favourites"))
+        button.clicked.connect(lambda: self.buttonAction("favourite"))
         layout.addWidget(button, 1, 2, 2, 1)
 
         # Queue
@@ -78,20 +79,33 @@ class WindowHome(QWidget):
     def buttonAction(self, i):
         # Pythonic switch-case
 
+        def getStackWidget(self):
+            return QStackedWidget(self)
+
         def buttonTitle(self):
-            pass
+            stack = getStackWidget(self)
+            stack.addWidget(SearchTemplate("搜索全部/Search"))
+            self.window().changeWindow(stack)
 
         def buttonArtist(self):
-            pass
+            stack = getStackWidget(self)
+            stack.addWidget(SearchTemplate("搜索歌手/Artist Search"))
+            self.window().changeWindow(stack)
 
         def buttonLanguage(self):
-            pass
+            stack = getStackWidget(self)
+            stack.addWidget(SearchTemplate("搜索语言/Language Search"))
+            self.window().changeWindow(stack)
 
         def buttonPlaylist(self):
-            pass
+            stack = getStackWidget(self)
+            stack.addWidget(SearchTemplate("播放清单/Playlists"))
+            self.window().changeWindow(stack)
 
         def buttonFavourites(self):
-            pass
+            stack = getStackWidget(self)
+            stack.addWidget(SearchTemplate("最喜欢的/Favourites"))
+            self.window().changeWindow(stack)
 
         def buttonQueue(self):
             pass
@@ -104,7 +118,7 @@ class WindowHome(QWidget):
             "artist": buttonArtist,
             "language": buttonLanguage,
             "playlist": buttonPlaylist,
-            "favourites": buttonFavourites,
+            "favourite": buttonFavourites,
             "queue": buttonQueue,
             "statistics": buttonStatistics
         }
