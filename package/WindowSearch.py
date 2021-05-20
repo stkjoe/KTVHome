@@ -4,7 +4,10 @@ from PySide6.QtGui import QFont, QIcon, QPixmap
 from PySide6.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QToolButton, QHBoxLayout
 import package.DatabaseAccess as DB
 
-class SearchTemplate(QWidget):
+# TODO:
+# Segment classes to separate files
+
+class WindowSearch(QWidget):
     def __init__(self, heading, parent=None, counter=0, pastResults={}, grid=False):
         QWidget.__init__(self)
         self.setParent(parent)
@@ -88,8 +91,10 @@ class SearchTemplate(QWidget):
     def updateResults(self):
         if self.heading == "播放清单/Playlists":
             self.results.addResults(DB.getPlaylists(self.searchBar.text()))
-        elif self.heading == "最喜欢的/Favourites":
-            self.results.addResults(DB.getFavourites(self.searchBar.text()))
+        elif self.heading == "最喜欢的歌曲/Favourite Songs":
+            self.results.addResults(DB.getFavouriteSongs(self.searchBar.text()))
+        elif self.heading == "最喜欢的歌手/Favourite Artists":
+            self.results.addResults(DB.getFavouriteArtists(self.searchBar.text()))
         elif self.heading == "搜索语言/Language Search":
             self.results.addResults(DB.getLanguages(self.searchBar.text()))
         elif self.heading == "搜索歌手/Artist Search":
@@ -214,7 +219,7 @@ class SearchTemplate(QWidget):
                 return label
 
             def clickedPlaylist(self):
-                self.window().content.addWidget(SearchTemplate("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
+                self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
                 self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
 
             def clickedFavourite(self):
@@ -222,7 +227,7 @@ class SearchTemplate(QWidget):
                     self.favouriteButton.seticon(QIcon("icons/star-yellow.svg"))
                 else:
                     self.favouriteButton.seticon(QIcon("icons/star.svg"))
-                DB.setFavourite(self.result["song_id"])
+                DB.setFavouriteSong(self.result["song_id"])
 
     class ResultsGrid(QScrollArea):
         def __init__(self, parent=None):
@@ -275,11 +280,21 @@ class SearchTemplate(QWidget):
                 self.setStyleSheet("QToolButton:pressed { background-color: rgba(255, 255, 255, 0.1)} QToolButton { background-color: rgba(255, 255, 255, 0.05); border: 1px solid white}")
 
                 # Set layout
-                self.layout = QHBoxLayout()
+                self.layout = QGridLayout()
 
                 if result["type"] == "artists":
                     self.formattedImage(result["artist_path"])
                     self.formattedLabel(result["artist_name"])
+                    
+                    self.favouriteButton = QToolButton()
+                    if self.result["favourited"] == 0:
+                        self.favouriteButton.setIcon(QIcon("icons/star.svg"))
+                    else:
+                        self.favouriteButton.setIcon(QIcon("icons/star-yelow.svg"))
+                    self.favouriteButton.setIconSize(QSize(30, 30))
+                    self.favouriteButton.setFixedSize(70, 70)
+                    self.favouriteButton.clicked.connect(lambda: self.clickedFavourite)
+                    self.layout.addWidget(self.favouriteButton, 1)
                     self.clicked.connect(self.clickedArtist)
                 elif result["type"] == "languages":
                     self.formattedImage(result["language_path"])
@@ -288,10 +303,17 @@ class SearchTemplate(QWidget):
 
                 self.setLayout(self.layout)
 
+            def clickedFavourite(self):
+                if self.favouriteButton.icon() == QIcon("icons/star.svg"):
+                    self.favouriteButton.seticon(QIcon("icons/star-yellow.svg"))
+                else:
+                    self.favouriteButton.seticon(QIcon("icons/star.svg"))
+                DB.setFavouriteArtists(self.result["artist_id"])
+
             def formattedImage(self, path):
                 image = QPixmap(path)
                 image.scaled(250, 250)
-                self.layout.addWidget(image)
+                self.layout.addWidget(image, 0)
 
             def formattedLabel(self, text):
                 label = QLabel(text)
@@ -301,12 +323,12 @@ class SearchTemplate(QWidget):
                 label.setStyleSheet("color: white")
                 label.setAlignment(Qt.AlignCenter)
                 label.setFont(font)
-                self.layout.addWidget(label)
+                self.layout.addWidget(label, 1)
 
             def clickedArtist(self):
-                self.window().content.addWidget(SearchTemplate("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
+                self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
                 self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
 
             def clickedLanguage(self):
-                self.window().content.addWidget(SearchTemplate("搜索歌手/Artist Search", self, self.parent().parent().counter + 1, self.result))
+                self.window().content.addWidget(WindowSearch("搜索歌手/Artist Search", self, self.parent().parent().counter + 1, self.result))
                 self.window().content.setCurrentIndex(self.parent().parent().counter + 1)

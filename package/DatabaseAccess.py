@@ -42,6 +42,7 @@ def startUp():
                     artist_name TEXT NOT NULL,
                     artist_path TEXT,
                     language_id INTEGER NOT NULL,
+                    favourited INTEGER DEFAULT 0,
                     PRIMARY KEY (artist_id),
                     FOREIGN KEY (language_id) REFERENCES language (language_id)
                         ON DELETE NO ACTION ON UPDATE CASCADE
@@ -106,11 +107,21 @@ def getPlaylists(keyword):
         ))
 
 # Function for all favourited songs
-def getFavourites(keyword):
+def getFavouriteSongs(keyword):
     return fetchResults("SELECT 'songs', a.*, b.artist_name FROM songs a, artists b WHERE a.favourited = 1 AND a.artist_id = b.artist_id AND a.song_title LIKE '%{}%'".format(
         keyword
         ))
 
-# Function for toggling favourite
-def setFavourite(song_id):
+# Function for all favourited artiosts
+def getFavouriteArtists(keyword):
+    return fetchResults("SELECT 'artists', * FROM artists WHERE favourited = 1 AND artist_name LIKE '%{}%'".format(
+        keyword
+        ))
+
+# Function for toggling favourite song
+def setFavouriteSongs(song_id):
     execute("UPDATE songs SET favourited = 1 - favourited WHERE song_id = {}".format(song_id))
+
+# Function for toggling favourite artist
+def setFavouriteArtists(artist_id):
+    execute("UPDATE artists SET favourited = 1 - favourited WHERE artist_id = {}".format(artist_id))
