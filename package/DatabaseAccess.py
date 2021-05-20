@@ -20,6 +20,12 @@ def fetchResults(executeLine):
     disconnect(conn)
     return results
 
+def execute(executeLine):
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute(executeLine)
+    disconnect(conn)
+
 # Function to create tables if they do not exist
 def startUp():
     conn = connect()
@@ -87,7 +93,7 @@ def getSongArtists(keyword, language=""):
 
 # Function for all titles
 def getSongTitles(keyword, artist="", playlist=""):
-    return fetchResults("SELECT 'songs', * FROM songs WHERE song_title LIKE '%{}%'{}{}".format(
+    return fetchResults("SELECT 'songs', a.*, b.artist_name FROM songs a, artists b WHERE a.artist_id = b.artist_id AND song_title LIKE '%{}%'{}{}".format(
         keyword,
         " AND artist_id = {}".format(artist) if artist != "" else "",
         " AND WHERE song_id IN (SELECT song_id FROM playlist_videos WHERE playlist_id = {}".format(playlist) if artist != "" else ""
@@ -101,6 +107,10 @@ def getPlaylists(keyword):
 
 # Function for all favourited songs
 def getFavourites(keyword):
-    return fetchResults("SELECT 'songs', * FROM songs WHERE favourited = 1 AND song_title LIKE '%{}%'".format(
+    return fetchResults("SELECT 'songs', a.*, b.artist_name FROM songs a, artists b WHERE a.favourited = 1 AND a.artist_id = b.artist_id AND a.song_title LIKE '%{}%'".format(
         keyword
         ))
+
+# Function for toggling favourite
+def setFavourite(song_id):
+    execute("UPDATE songs SET favourited = 1 - favourited WHERE song_id = {}".format(song_id))

@@ -1,6 +1,7 @@
+from PySide6 import QtCore
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QFont, QPixmap
-from PySide6.QtWidgets import QGridLayout, QLabel, QLineEdit, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QToolButton, QHBoxLayout
+from PySide6.QtGui import QFont, QIcon, QPixmap
+from PySide6.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QToolButton, QHBoxLayout
 import package.DatabaseAccess as DB
 
 class SearchTemplate(QWidget):
@@ -17,6 +18,7 @@ class SearchTemplate(QWidget):
         # The heading of the widget
         label = QLabel(heading)
         label.setAlignment(Qt.AlignCenter)
+        label.setFixedHeight(40)
         # TODO: Change with global themes
         label.setStyleSheet("color: white;")
         # Font for the label
@@ -108,9 +110,6 @@ class SearchTemplate(QWidget):
         if self.counter:
             self.window().content.setCurrentIndex(self.counter - 1)
             self.window().content.removeWidget(self)
-    
-    def songClicked(self):
-        print("songClicked")
 
     class ResultsList(QScrollArea):
         def __init__(self, parent=None):
@@ -149,9 +148,6 @@ class SearchTemplate(QWidget):
                 label.setFont(font)
                 
                 self.layout.addWidget(label)
-        
-        def songClicked(self):
-            pass
 
         class ResultsListItem(QToolButton):
             def __init__(self, result, parent=None):
@@ -168,25 +164,44 @@ class SearchTemplate(QWidget):
 
                 # Set layout
                 self.layout = QHBoxLayout()
+                self.layout.setContentsMargins(0, 0, 0, 0)
+                self.layout.setSpacing(0)
 
                 if result["type"] == "songs":
-                    self.formatTitle(result)
-                    self.clicked.connect(lambda: self.parent().parent().songClicked(result, self.parent().parent().pastResults))
+                    self.formatTitle()
                 elif result["type"] == "playlists":
-                    self.formatPlaylist(result)
+                    self.formatPlaylist()
                     self.clicked.connect(self.clickedPlaylist)
-
                 self.setLayout(self.layout)
 
-            def formatTitle(self, result):
-                labelTitle = self.formattedLabel(QLabel(result["song_title"]))
-                labelArtist = self.formattedLabel(QLabel(result["song_artist"]))
-                labelArtist.setFixedWidth(100)
-                self.layout.addWidget(labelTitle)
+            def formatTitle(self):
+                labelQueue = self.formattedLabel(QLabel("?"))
+                labelQueue.setFixedWidth(70)
+                labelQueue.setAlignment(Qt.AlignCenter)
+                self.layout.addWidget(labelQueue)
+                labelArtist = self.formattedLabel(QLabel(self.result["playlist_name"]))
+                labelArtist.setFixedWidth(300)
                 self.layout.addWidget(labelArtist)
+                labelTitle = self.formattedLabel(QLabel(self.result["playlist_name"]))
+                self.layout.addWidget(labelTitle)
+                # Add buttons for favourites and playlists
+                self.favouriteButton = QToolButton()
+                if self.result["favourited"] == 0:
+                    self.favouriteButton.setIcon(QIcon("icons/star.svg"))
+                else:
+                    self.favouriteButton.setIcon(QIcon("icons/star-yelow.svg"))
+                self.favouriteButton.setIconSize(QSize(30, 30))
+                self.favouriteButton.setFixedSize(70, 70)
+                self.favouriteButton.clicked.connect(lambda: self.clickedFavourite)
+                self.layout.addWidget(self.favouriteButton)
+                playlistButton = QToolButton()
+                playlistButton.setIcon(QIcon("icons/music-player-2.svg"))
+                playlistButton.setIconSize(QSize(30, 30))
+                playlistButton.setFixedSize(70, 70)
+                self.layout.addWidget(playlistButton)
 
-            def formatPlaylist(self, result):
-                labelPlaylist = self.formattedLabel(QLabel(result["playlist_name"]))
+            def formatPlaylist(self):
+                labelPlaylist = self.formattedLabel(QLabel(self.result["playlist_name"]))
                 self.layout.addWidget(labelPlaylist)
 
             def formattedLabel(self, label):
@@ -201,6 +216,13 @@ class SearchTemplate(QWidget):
             def clickedPlaylist(self):
                 self.window().content.addWidget(SearchTemplate("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
                 self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
+
+            def clickedFavourite(self):
+                if self.favouriteButton.icon() == QIcon("icons/star.svg"):
+                    self.favouriteButton.seticon(QIcon("icons/star-yellow.svg"))
+                else:
+                    self.favouriteButton.seticon(QIcon("icons/star.svg"))
+                DB.setFavourite(self.result["song_id"])
 
     class ResultsGrid(QScrollArea):
         def __init__(self, parent=None):
@@ -259,7 +281,7 @@ class SearchTemplate(QWidget):
                     self.formattedImage(result["artist_path"])
                     self.formattedLabel(result["artist_name"])
                     self.clicked.connect(self.clickedArtist)
-                elif result["type"] == "langauges":
+                elif result["type"] == "languages":
                     self.formattedImage(result["language_path"])
                     self.formattedLabel(result["language_name"])
                     self.clicked.connect(self.clickedLanguage)
