@@ -1,7 +1,8 @@
 from PySide6.QtCore import QSize, QTime, QTimer, Qt
 from PySide6.QtGui import QFont, QIcon
-from PySide6.QtWidgets import QGridLayout, QLabel, QScrollArea, QToolButton, QWidget
+from PySide6.QtWidgets import QGridLayout, QLabel, QScrollArea, QStackedWidget, QToolButton, QWidget
 import time
+from package.WindowSearch import WindowSearch
 
 class OverlayTop(QWidget):
     def __init__(self, parent=None):
@@ -44,7 +45,12 @@ class OverlayTop(QWidget):
         self.button.setAutoRaise(True)
         self.button.setStyleSheet("QToolButton:pressed { background-color: rgba(255, 255, 255, 0.1)}")
         # TODO: Connect button clicked action to search action
-        # button.clicked.connect()
+        self.button.clicked.connect(self.buttonTitle)
+
+    def buttonTitle(self):
+        stack = QStackedWidget(self)
+        stack.addWidget(WindowSearch("搜索全部/Search"))
+        self.window().changeWindow(stack)
 
     def initTimes(self):        
         # Create the local and elapsed times labels
