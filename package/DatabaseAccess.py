@@ -7,6 +7,7 @@ def connect():
     return conn
 
 def disconnect(conn):
+    conn.commit()
     conn.close()
 
 def fetchResults(executeLine):
@@ -125,3 +126,11 @@ def setFavouriteSongs(song_id):
 # Function for toggling favourite artist
 def setFavouriteArtists(artist_id):
     execute("UPDATE artists SET favourited = 1 - favourited WHERE artist_id = {}".format(artist_id))
+
+# Function for adding playlists
+def newPlaylist(name):
+    execute("INSERT INTO playlists (playlist_name) VALUES (\"{}\")".format(name))
+
+# Function for adding songs to existing playlists
+def addPlaylistSong(playlist, song):
+    execute("INSERT INTO playlist_videos (playlist_id, song_id) VALUES ({}, {})".format(playlist, song))
