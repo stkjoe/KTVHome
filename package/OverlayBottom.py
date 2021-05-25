@@ -23,7 +23,7 @@ class OverlayBottom(QWidget):
 
         # Initialise buttons
         buttons = []
-        args = ["home", "user", "windows", "back", "play-button", "next"]
+        args = ["home", "user", "windows", "back", "play-pause", "next"]
         for i in args:
             button = QToolButton()
             button.setIcon(QIcon("icons/{}.svg".format(i)))
@@ -81,7 +81,7 @@ class OverlayBottom(QWidget):
             "user": buttonVocal,
             "windows": buttonQueue,
             "back": buttonRestart,
-            "play-button": buttonPlay,
+            "play-pause": buttonPlay,
             "next": buttonSkip
         }
         func = switcher.get(i, buttonHome)
