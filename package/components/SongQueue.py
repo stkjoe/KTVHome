@@ -2,6 +2,7 @@ class SongQueue:
     # Keeps track of added songs.
     def __init__(self):
         self.queue = []
+        self.history = []
 
     def getQueue(self):
         return self.queue
@@ -51,3 +52,8 @@ class SongQueue:
         # Checks if a song is in the queue
         # song: (dict) information of the song
         return song in self.queue
+
+    def addHistory(self, song):
+        # Add song to history
+        # song: (dict) information of the song
+        self.history.append(song)
