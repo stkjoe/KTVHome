@@ -2,8 +2,8 @@ from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
 from .OverlayTop import OverlayTop
 from .OverlayBottom import OverlayBottom
 from .WindowHome import WindowHome
-from package.DatabaseAccess import startUp
-from package.SongQueue import SongQueue
+from package.components.DatabaseAccess import startUp
+from package.components.SongQueue import SongQueue
 
 class MainWindow(QMainWindow):
     def __init__(self):

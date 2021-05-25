@@ -43,3 +43,8 @@ class SongQueue:
         if not indx1:
             return
         self.queue = [song] + self.queue[:indx1] + self.queue[indx1 + 1:]
+
+    def songInQueue(self, song):
+        # Checks if a song is in the queue
+        # song: (dict) information of the song
+        return song in self.queue

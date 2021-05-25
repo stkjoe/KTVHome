@@ -1,6 +1,5 @@
 import sqlite3
 
-
 # Helper functions, not to be used outside of this
 def connect():
     conn = sqlite3.connect("db/database.db")
