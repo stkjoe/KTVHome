@@ -3,6 +3,7 @@ from .OverlayTop import OverlayTop
 from .OverlayBottom import OverlayBottom
 from .WindowHome import WindowHome
 from package.DatabaseAccess import startUp
+from package.SongQueue import SongQueue
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -10,6 +11,9 @@ class MainWindow(QMainWindow):
 
         # Database startup
         startUp()
+
+        # Start Song Queue List
+        self.songQueue = SongQueue()
 
         # Set the colour of the window
         self.setStyleSheet("MainWindow { background-color: rgb(25, 33, 60)}")
