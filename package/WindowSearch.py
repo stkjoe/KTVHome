@@ -174,6 +174,7 @@ class WindowSearch(QWidget):
 
                 if result["type"] == "songs":
                     self.formatTitle()
+                    self.clicked.connect(self.clickedSong)
                 elif result["type"] == "playlists":
                     self.formatPlaylist()
                     self.clicked.connect(self.clickedPlaylist)
@@ -222,6 +223,13 @@ class WindowSearch(QWidget):
                 label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
                 label.setFont(font)
                 return label
+
+            def clickedSong(self):
+                self.window().songQueue.addSong(self.result)
+
+                if len(self.window().songQueue.getQueue()) == 1:
+                # If this is the first song to queue, signal media player to start it
+                    self.window().mediaPlayer.skipSong()
 
             def clickedPlaylist(self):
                 self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))

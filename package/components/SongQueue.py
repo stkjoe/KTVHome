@@ -17,6 +17,12 @@ class SongQueue:
         # song: (dict) information of the song
         self.queue.remove(song)
 
+    def popSong(self):
+        # Pop a song from the queue
+        song = self.queue[0]
+        self.queue = self.queue[1:]
+        return song
+
     def moveUp(self, song):
         # Move a song up the queue
         # song: (dict) information of the song

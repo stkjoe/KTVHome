@@ -62,19 +62,19 @@ class OverlayBottom(QWidget):
             self.window().changeWindow(WindowHome(self))
 
         def buttonVocal(self):
-            pass
+            self.window().mediaPlayer.swapTrack()
 
         def buttonQueue(self):
             self.window().changeWindow(WindowQueue(self))
 
         def buttonRestart(self):
-            pass
+            self.window().mediaPlayer.restartSong()
 
         def buttonPlay(self):
-            pass
+            self.window().mediaPlayer.pauseSong()
 
         def buttonSkip(self):
-            pass
+            self.window().mediaPlayer.skipSong()
 
         switcher = {
             "home": buttonHome,

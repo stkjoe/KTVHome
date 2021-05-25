@@ -1,3 +1,4 @@
+from package.MediaPlayer import MediaPlayer
 from PySide6.QtWidgets import QMainWindow, QGridLayout, QWidget
 from .OverlayTop import OverlayTop
 from .OverlayBottom import OverlayBottom
@@ -14,6 +15,9 @@ class MainWindow(QMainWindow):
 
         # Start Song Queue List
         self.songQueue = SongQueue()
+
+        # Start Media Player
+        self.mediaPlayer = MediaPlayer(self.songQueue, self.setMarquee)
 
         # Set the colour of the window
         self.setStyleSheet("MainWindow { background-color: rgb(25, 33, 60)}")
