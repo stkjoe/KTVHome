@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.overlayBottom, 2, 0)
 
         # Create home page then add to layout
-        self.content = WindowHome()
+        self.content = WindowHome(self)
         self.layout.addWidget(self.content, 1, 0)
 
         # Create widget, then set layout to widget which gets added as central widget

@@ -2,6 +2,7 @@ from package.WindowSearch import WindowSearch
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtWidgets import QGridLayout, QLabel, QSizePolicy, QStackedWidget, QToolButton, QWidget
+from package.WindowQueue import WindowQueue
 
 class WindowHome(QWidget):
     def __init__(self, parent=None):
@@ -92,36 +93,36 @@ class WindowHome(QWidget):
 
         def buttonTitle(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("搜索全部/Search"))
+            stack.addWidget(WindowSearch("搜索全部/Search", stack))
             self.window().changeWindow(stack)
 
         def buttonArtist(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("搜索歌手/Artist Search"))
+            stack.addWidget(WindowSearch("搜索歌手/Artist Search", stack))
             self.window().changeWindow(stack)
 
         def buttonLanguage(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("搜索语言/Language Search"))
+            stack.addWidget(WindowSearch("搜索语言/Language Search", stack))
             self.window().changeWindow(stack)
 
         def buttonPlaylist(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("播放清单/Playlists"))
+            stack.addWidget(WindowSearch("播放清单/Playlists", stack))
             self.window().changeWindow(stack)
 
         def buttonFavouriteA(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("最喜欢的歌曲/Favourite Songs"))
+            stack.addWidget(WindowSearch("最喜欢的歌曲/Favourite Songs", stack))
             self.window().changeWindow(stack)
 
         def buttonFavouriteB(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("最喜欢的歌手/Favourite Artists"))
+            stack.addWidget(WindowSearch("最喜欢的歌手/Favourite Artists", stack))
             self.window().changeWindow(stack)
 
         def buttonQueue(self):
-            pass
+            self.window().changeWindow(WindowQueue(self))
 
         def buttonStatistics(self):
             pass

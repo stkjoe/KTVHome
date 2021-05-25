@@ -3,6 +3,9 @@ class SongQueue:
     def __init__(self):
         self.queue = []
 
+    def getQueue(self):
+        return self.queue
+
     def addSong(self, song):
         # Add a song to the queue
         # song: (dict) information of the song

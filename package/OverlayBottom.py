@@ -2,6 +2,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QSizePolicy, QToolButton, QWidget, QHBoxLayout
 from package.WindowHome import WindowHome
+from package.WindowQueue import WindowQueue
 
 class OverlayBottom(QWidget):
     def __init__(self, parent=None):
@@ -58,13 +59,13 @@ class OverlayBottom(QWidget):
         # Pythonic switch-case
 
         def buttonHome(self):
-            self.window().changeWindow(WindowHome())
+            self.window().changeWindow(WindowHome(self))
 
         def buttonVocal(self):
             pass
 
         def buttonQueue(self):
-            pass
+            self.window().changeWindow(WindowQueue(self))
 
         def buttonRestart(self):
             pass
