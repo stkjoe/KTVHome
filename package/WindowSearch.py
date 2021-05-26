@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QFont, QIcon, QPixmap
-from PySide6.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QToolButton, QHBoxLayout
+from PySide6.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QScroller, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QToolButton, QHBoxLayout
 import package.components.DatabaseAccess as DB
 from package.components.PlaylistPopup import PlaylistPopup
 
@@ -125,6 +125,8 @@ class WindowSearch(QWidget):
             self.setStyleSheet("QScrollArea { background-color: transparent } .QFrame { background-color: transparent }")
             self.setWidgetResizable(True)
             self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
+            QScroller.grabGesture(self, QScroller.LeftMouseButtonGesture)
 
             self.layout = QVBoxLayout()
             self.layout.setContentsMargins(0, 0, 0, 0)
@@ -267,6 +269,8 @@ class WindowSearch(QWidget):
             self.setStyleSheet("QScrollArea { background-color: transparent } .QFrame { background-color: transparent }")
             self.setWidgetResizable(True)
             self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
+            QScroller.grabGesture(self, QScroller.LeftMouseButtonGesture)
 
             self.layout = QGridLayout()
             self.layout.setContentsMargins(0, 0, 0, 0)
