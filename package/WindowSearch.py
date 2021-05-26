@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QFont, QIcon, QPixmap
-from PySide6.QtWidgets import QGridLayout, QLabel, QLineEdit, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QToolButton, QHBoxLayout
+from PySide6.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QToolButton, QHBoxLayout
 import package.components.DatabaseAccess as DB
 from package.components.PlaylistPopup import PlaylistPopup
 
@@ -122,14 +122,18 @@ class WindowSearch(QWidget):
             self.setParent(parent)
             
             # Make QScrollArea transparent
-            self.setStyleSheet("QScrollArea { background-color: transparent }")
+            self.setStyleSheet("QScrollArea { background-color: transparent } .QFrame { background-color: transparent }")
             self.setWidgetResizable(True)
+            self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
             self.layout = QVBoxLayout()
             self.layout.setContentsMargins(0, 0, 0, 0)
             self.layout.setSpacing(0)
 
-            self.setLayout(self.layout)
+            frame = QFrame()
+            frame.setLayout(self.layout)
+
+            self.setWidget(frame)
 
         def clearResults(self):
             while self.layout.count():
@@ -260,14 +264,18 @@ class WindowSearch(QWidget):
             self.setParent(parent)
             
             # Make QScrollArea transparent
-            self.setStyleSheet("QScrollArea { background-color: transparent }")
+            self.setStyleSheet("QScrollArea { background-color: transparent } .QFrame { background-color: transparent }")
             self.setWidgetResizable(True)
+            self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
             self.layout = QGridLayout()
             self.layout.setContentsMargins(0, 0, 0, 0)
             self.layout.setSpacing(0)
 
-            self.setLayout(self.layout)
+            frame = QFrame()
+            frame.setLayout(self.layout)
+
+            self.setWidget(frame)
 
         def clearResults(self):
             while self.layout.count():
