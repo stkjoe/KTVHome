@@ -31,15 +31,6 @@ class WindowQueue(QWidget):
 
         self.setLayout(layout)
 
-    def addSong(song):
-        pass
-
-    def removeSong(song):
-        pass
-
-    def skipSong():
-        pass
-
     class QueueList(QScrollArea):
         def __init__(self, parent=None):
             QScrollArea.__init__(self)
