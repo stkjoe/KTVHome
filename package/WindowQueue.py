@@ -144,24 +144,24 @@ class WindowQueue(QWidget):
             
             def moveUp(self):
                 self.window().songQueue.moveUp(self.song)
-                self.parent().updateQueue()
+                self.window().content.queueList.updateQueue()
 
             def moveDown(self):
                 self.window().songQueue.moveDown(self.song)
-                self.parent().updateQueue()
+                self.window().content.queueList.updateQueue()
 
             def moveTop(self):
                 self.window().songQueue.moveTop(self.song)
-                self.parent().updateQueue()
+                self.window().content.queueList.updateQueue()
             
             def playSong(self):
                 self.window().songQueue.moveTop(self.song)
                 self.window().overlayBottom.buttonAction("next")
-                self.parent().updateQueue()
+                self.window().content.queueList.updateQueue()
             
             def removeSong(self):
                 self.window().songQueue.removeSong(self.song)
-                self.parent().updateQueue()
+                self.window().content.queueList.updateQueue()
                 
         def updateQueue(self):
             while self.layout.count():
