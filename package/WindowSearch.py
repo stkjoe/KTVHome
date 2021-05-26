@@ -242,8 +242,8 @@ class WindowSearch(QWidget):
                 self.window().mediaPlayer.updateMarquee()
 
             def clickedPlaylist(self):
-                self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
-                self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
+                self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.window().content.currentWidget().counter + 1, self.result))
+                self.window().content.setCurrentIndex(self.window().content.currentWidget().counter + 1)
 
             def clickedFavourite(self):
                 if self.favouriteButton.isFavourited:
@@ -367,9 +367,10 @@ class WindowSearch(QWidget):
                 self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
             def clickedArtist(self):
-                self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
-                self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
+                self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.window().content.currentWidget().counter + 1, self.result))
+                self.window().content.setCurrentIndex(self.window().content.currentWidget().counter + 1)
 
             def clickedLanguage(self):
-                self.window().content.addWidget(WindowSearch("搜索歌手/Artist Search", self, self.parent().parent().counter + 1, self.result, grid=True))
-                self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
+                print(self.parent())
+                self.window().content.addWidget(WindowSearch("搜索歌手/Artist Search", self, self.window().content.currentWidget().counter + 1, self.result, grid=True))
+                self.window().content.setCurrentIndex(self.window().content.currentWidget().counter + 1)

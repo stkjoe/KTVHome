@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         window = QWidget()
         window.setLayout(self.layout)
         self.setCentralWidget(window)
+        self.mediaPlayer.start()
 
     def setMarquee(self, msg):
         # Sets the text of the marquee label

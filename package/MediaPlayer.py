@@ -1,4 +1,6 @@
 import vlc
+import package.components.DatabaseAccess as DB
+import random
 
 class MediaPlayer():
     def __init__(self, songQueue, marqueeFunc, parent=None):
@@ -9,8 +11,6 @@ class MediaPlayer():
         self.marqueeFunc = marqueeFunc
 
     def restartSong(self):
-        if not self.currentSong:
-            return
         self.player.set_media(vlc.Media(self.parent.songPath + self.currentSong["song_path"]))
         self.player.play()
         self.updateMarquee()
@@ -35,3 +35,7 @@ class MediaPlayer():
             self.marqueeFunc(text)
         else:
             self.marqueeFunc("正在播放/Now Playing：{} - {}".format(self.currentSong["artist_name"], self.currentSong["song_title"]))
+
+    def start(self):
+        self.currentSong = random.choice(DB.getSongTitles(""))
+        self.restartSong()
