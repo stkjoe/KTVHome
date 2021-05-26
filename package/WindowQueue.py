@@ -84,11 +84,11 @@ class WindowQueue(QWidget):
                 labelQueue.setAlignment(Qt.AlignCenter)
                 self.layout.addWidget(labelQueue)
 
-                labelArtist = self.formattedLabel(QLabel(self.song["playlist_name"]))
+                labelArtist = self.formattedLabel(QLabel(self.song["artist_name"]))
                 labelArtist.setFixedWidth(300)
                 self.layout.addWidget(labelArtist)
 
-                labelTitle = self.formattedLabel(QLabel(self.song["playlist_name"]))
+                labelTitle = self.formattedLabel(QLabel(self.song["song_title"]))
                 self.layout.addWidget(labelTitle)
 
                 font = QFont()
@@ -100,6 +100,7 @@ class WindowQueue(QWidget):
                 btnMoveUp.setFixedSize(70, 70)
                 btnMoveUp.setStyleSheet("color: white")
                 btnMoveUp.setFont(font)
+                btnMoveUp.clicked.connect(self.moveUp)
                 self.layout.addWidget(btnMoveUp)
 
                 btnMoveDown = QToolButton()
@@ -107,6 +108,7 @@ class WindowQueue(QWidget):
                 btnMoveDown.setFixedSize(70, 70)
                 btnMoveDown.setStyleSheet("color: white")
                 btnMoveDown.setFont(font)
+                btnMoveDown.clicked.connect(self.moveDown)
                 self.layout.addWidget(btnMoveDown)
 
                 btnMoveTop = QToolButton()
@@ -114,6 +116,7 @@ class WindowQueue(QWidget):
                 btnMoveTop.setFixedSize(70, 70)
                 btnMoveTop.setStyleSheet("color: white")
                 btnMoveTop.setFont(font)
+                btnMoveTop.clicked.connect(self.moveTop)
                 self.layout.addWidget(btnMoveTop)
 
                 btnPlay = QToolButton()
@@ -121,6 +124,7 @@ class WindowQueue(QWidget):
                 btnPlay.setFixedSize(70, 70)
                 btnPlay.setStyleSheet("color: white")
                 btnPlay.setFont(font)
+                btnPlay.clicked.connect(self.playSong)
                 self.layout.addWidget(btnPlay)
 
                 btnRemove = QToolButton()
@@ -128,27 +132,37 @@ class WindowQueue(QWidget):
                 btnRemove.setFixedSize(70, 70)
                 btnRemove.setStyleSheet("color: white")
                 btnRemove.setFont(font)
-                btnRemove.clicked.connect()
+                btnRemove.clicked.connect(self.removeSong)
                 self.layout.addWidget(btnRemove)
+
+            def formattedLabel(self, label):
+                font = QFont()
+                font.setPixelSize(25)
+                # TODO: change with global themes
+                label.setStyleSheet("color: white")
+                label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+                label.setFont(font)
+                return label
             
             def moveUp(self):
-                self.window().songQueue.getQueue().moveUp(self.song)
+                self.window().songQueue.moveUp(self.song)
                 self.parent().updateQueue()
 
             def moveDown(self):
-                self.window().songQueue.getQueue().moveDown(self.song)
+                self.window().songQueue.moveDown(self.song)
                 self.parent().updateQueue()
 
             def moveTop(self):
-                self.window().songQueue.getQueue().moveTop(self.song)
+                self.window().songQueue.moveTop(self.song)
                 self.parent().updateQueue()
             
             def playSong(self):
-                self.window().songQueue.getQueue().moveTop(self.song)
+                self.window().songQueue.moveTop(self.song)
                 self.window().overlayBottom.buttonAction("next")
+                self.parent().updateQueue()
             
             def removeSong(self):
-                self.window().songQueue.getQueue().removeSong(self.song)
+                self.window().songQueue.removeSong(self.song)
                 self.parent().updateQueue()
                 
         def updateQueue(self):
@@ -157,7 +171,7 @@ class WindowQueue(QWidget):
                 if item.widget() is not None:
                     item.widget().deleteLater()
             for i in self.window().songQueue.getQueue():
-                item = self.ResultsListItem(i, self)
+                item = self.QueueListItem(i, self)
                 self.layout.addWidget(item)
             if self.window().songQueue.getQueue():
                 self.layout.addStretch(1)
