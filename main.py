@@ -8,5 +8,6 @@ if __name__ == "__main__":
     window = MainWindow()
     window.resize(1366,768)
     window.show()
+    window.mediaPlayer.start()
 
     sys.exit(app.exec_())
