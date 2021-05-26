@@ -96,8 +96,8 @@ def getSongArtists(keyword, language=""):
 def getSongTitles(keyword, artist="", playlist=""):
     return fetchResults("SELECT 'songs', a.*, b.artist_name FROM songs a, artists b WHERE a.artist_id = b.artist_id AND song_title LIKE '%{}%'{}{}".format(
         keyword,
-        " AND artist_id = {}".format(artist) if artist != "" else "",
-        " AND WHERE song_id IN (SELECT song_id FROM playlist_videos WHERE playlist_id = {}".format(playlist) if artist != "" else ""
+        " AND a.artist_id = {}".format(artist) if artist != "" else "",
+        " AND a.song_id IN (SELECT song_id FROM playlist_videos WHERE playlist_id = {})".format(playlist) if playlist != "" else ""
         ))
 
 # Function for all playlists
@@ -119,11 +119,11 @@ def getFavouriteArtists(keyword):
         ))
 
 # Function for toggling favourite song
-def setFavouriteSongs(song_id):
+def setFavouriteSong(song_id):
     execute("UPDATE songs SET favourited = 1 - favourited WHERE song_id = {}".format(song_id))
 
 # Function for toggling favourite artist
-def setFavouriteArtists(artist_id):
+def setFavouriteArtist(artist_id):
     execute("UPDATE artists SET favourited = 1 - favourited WHERE artist_id = {}".format(artist_id))
 
 # Function for adding playlists
