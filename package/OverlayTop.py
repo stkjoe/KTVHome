@@ -88,6 +88,7 @@ class OverlayTop(QWidget):
         def __init__(self, parent=None):
             QScrollArea.__init__(self)
             self.setParent(parent)
+            self.text = ""
 
             # Set the background colour of the marquee text to white
             self.setStyleSheet("QScrollArea { background-color: rgba(255, 255, 255, 1)}")
@@ -121,7 +122,7 @@ class OverlayTop(QWidget):
             self.setSpeed(33)
 
         def updatePos(self):
-            self.x = (self.x + 1) % self.label.fontMetrics().horizontalAdvance(self.label.text())
+            self.x = (self.x + 1) % self.label.fontMetrics().horizontalAdvance(self.text)
             self.horizontalScrollBar().setValue(self.x)
 
         def setText(self, text):
@@ -129,13 +130,14 @@ class OverlayTop(QWidget):
             # text: (str) the text to be displayed
 
             # TODO: Change the separator bit when adding universal settings
-            text = text + "          "
+            self.text = text + "          "
+            self.x = 0
 
             # First need the widths of the current label windowspace and the text itself
             windowWidth = self.window().geometry().width()
             textWidth = self.label.fontMetrics().horizontalAdvance(text)
             # Concatenate the text on itself as many times as needed.
-            self.label.setText(text + (text * (windowWidth // textWidth + (windowWidth % textWidth > 0))))
+            self.label.setText(self.text + (self.text * (windowWidth // textWidth + (windowWidth % textWidth > 0))))
 
             # Finally, start the timer to start the effect
             self.timer.start(self.timer.interval())
