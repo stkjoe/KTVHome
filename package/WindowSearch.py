@@ -289,8 +289,6 @@ class WindowSearch(QWidget):
                 
         def addResults(self, results):
             self.clearResults()
-            col = 0
-            row = 0
             for i in range(len(results)):
                 item = self.ResultsGridItem(results[i], self)
                 self.layout.addWidget(item, i // 6, i % 6)
@@ -325,7 +323,7 @@ class WindowSearch(QWidget):
                 self.layout.setSpacing(0)
 
                 if result["type"] == "artists":
-                    self.formattedImage(result["artist_path"])
+                    self.formattedImage(self.window().artistPath + result["artist_path"])
                     self.formattedLabel(result["artist_name"])
                     
                     self.favouriteButton = QToolButton()
@@ -342,7 +340,7 @@ class WindowSearch(QWidget):
                     self.layout.addWidget(self.favouriteButton, 0, 0, Qt.AlignRight | Qt.AlignTop)
                     self.clicked.connect(self.clickedArtist)
                 elif result["type"] == "languages":
-                    self.formattedImage(result["language_path"])
+                    self.formattedImage(self.window().languagePath + result["language_path"])
                     self.formattedLabel(result["language_name"])
                     self.clicked.connect(self.clickedLanguage)
 

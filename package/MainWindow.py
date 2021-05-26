@@ -10,6 +10,11 @@ class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
 
+        # TODO: temp paths
+        self.artistPath = "img\\artist\\"
+        self.languagePath = "img\\language\\"
+        self.songPath = "lib\\"
+
         # Database startup
         startUp()
 
@@ -17,7 +22,7 @@ class MainWindow(QMainWindow):
         self.songQueue = SongQueue()
 
         # Start Media Player
-        self.mediaPlayer = MediaPlayer(self.songQueue, self.setMarquee)
+        self.mediaPlayer = MediaPlayer(self.songQueue, self.setMarquee, self)
 
         # Set the colour of the window
         self.setStyleSheet("MainWindow { background-color: rgb(25, 33, 60)}")

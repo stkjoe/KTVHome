@@ -1,7 +1,8 @@
 import vlc
 
 class MediaPlayer():
-    def __init__(self, songQueue, marqueeFunc):
+    def __init__(self, songQueue, marqueeFunc, parent=None):
+        self.parent = parent
         self.player = vlc.MediaPlayer()
         self.songQueue = songQueue
         self.currentSong = None
@@ -10,7 +11,7 @@ class MediaPlayer():
     def restartSong(self):
         if not self.currentSong:
             return
-        self.player.set_media(vlc.Media(self.currentSong["song_path"]))
+        self.player.set_media(vlc.Media(self.parent.songPath + self.currentSong["song_path"]))
         self.player.play()
         self.updateMarquee()
 
