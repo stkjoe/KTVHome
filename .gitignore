@@ -4,4 +4,6 @@ __pycache__/
 *.pyc
 database.db
 *.mkv
-*.jpg
+/icons
+/img
+/lib
