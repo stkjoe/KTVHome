@@ -162,6 +162,8 @@ class WindowQueue(QWidget):
             def removeSong(self):
                 self.window().songQueue.removeSong(self.song)
                 self.window().content.queueList.updateQueue()
+                if len(self.window().mediaPlayer.songQueue.getQueue()) == 0:
+                    self.window().mediaPlayer.updateMarquee()
                 
         def updateQueue(self):
             while self.layout.count():
