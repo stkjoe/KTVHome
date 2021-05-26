@@ -232,6 +232,8 @@ class WindowSearch(QWidget):
                 if len(self.window().songQueue.getQueue()) == 1 and not self.window().mediaPlayer.currentSong:
                 # If this is the first song to queue, signal media player to start it
                     self.window().mediaPlayer.skipSong()
+                
+                self.window().mediaPlayer.updateMarquee()
 
             def clickedPlaylist(self):
                 self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
