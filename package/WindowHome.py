@@ -1,5 +1,5 @@
 from package.WindowSearch import WindowSearch
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtWidgets import QGridLayout, QLabel, QSizePolicy, QStackedWidget, QToolButton, QWidget
 from package.WindowQueue import WindowQueue
@@ -98,12 +98,12 @@ class WindowHome(QWidget):
 
         def buttonArtist(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("搜索歌手/Artist Search", stack))
+            stack.addWidget(WindowSearch("搜索歌手/Artist Search", stack, grid=True))
             self.window().changeWindow(stack)
 
         def buttonLanguage(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("搜索语言/Language Search", stack))
+            stack.addWidget(WindowSearch("搜索语言/Language Search", stack, grid=True))
             self.window().changeWindow(stack)
 
         def buttonPlaylist(self):
@@ -118,7 +118,7 @@ class WindowHome(QWidget):
 
         def buttonFavouriteB(self):
             stack = getStackWidget(self)
-            stack.addWidget(WindowSearch("最喜欢的歌手/Favourite Artists", stack))
+            stack.addWidget(WindowSearch("最喜欢的歌手/Favourite Artists", stack, grid=True))
             self.window().changeWindow(stack)
 
         def buttonQueue(self):

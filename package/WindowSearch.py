@@ -55,7 +55,7 @@ class WindowSearch(QWidget):
             if "artist_id" in self.pastResults:
                 sublabel.setText("Artist: " + self.pastResults["artist_name"])
             elif "language_id" in self.pastResults:
-                sublabel.setText("Langauge: " + self.pastResults["language_name"])
+                sublabel.setText("Language: " + self.pastResults["language_name"])
             elif "playlist_id" in self.pastResults:
                 sublabel.setText("Playlist: " + self.pastResults["playlist_name"])
             font = QFont()
@@ -77,7 +77,7 @@ class WindowSearch(QWidget):
 
         # Set results page
         if (grid):
-            self.results = self.ResultsList(self)
+            self.results = self.ResultsGrid(self)
             layout.addWidget(self.results, 3, 0)
         else:
             self.results = self.ResultsList(self)
@@ -185,20 +185,22 @@ class WindowSearch(QWidget):
                 labelQueue.setFixedWidth(70)
                 labelQueue.setAlignment(Qt.AlignCenter)
                 self.layout.addWidget(labelQueue)
-                labelArtist = self.formattedLabel(QLabel(self.result["playlist_name"]))
+                labelArtist = self.formattedLabel(QLabel(self.result["artist_name"]))
                 labelArtist.setFixedWidth(300)
                 self.layout.addWidget(labelArtist)
-                labelTitle = self.formattedLabel(QLabel(self.result["playlist_name"]))
+                labelTitle = self.formattedLabel(QLabel(self.result["song_title"]))
                 self.layout.addWidget(labelTitle)
                 # Add buttons for favourites and playlists
                 self.favouriteButton = QToolButton()
                 if self.result["favourited"] == 0:
+                    self.favouriteButton.isFavourited = False
                     self.favouriteButton.setIcon(QIcon("icons/star.svg"))
                 else:
-                    self.favouriteButton.setIcon(QIcon("icons/star-yelow.svg"))
+                    self.favouriteButton.isFavourited = True
+                    self.favouriteButton.setIcon(QIcon("icons/star-yellow.svg"))
                 self.favouriteButton.setIconSize(QSize(30, 30))
                 self.favouriteButton.setFixedSize(70, 70)
-                self.favouriteButton.clicked.connect(lambda: self.clickedFavourite)
+                self.favouriteButton.clicked.connect(self.clickedFavourite)
                 self.layout.addWidget(self.favouriteButton)
                 playlistButton = QToolButton()
                 playlistButton.setIcon(QIcon("icons/music-player-2.svg"))
@@ -227,7 +229,7 @@ class WindowSearch(QWidget):
             def clickedSong(self):
                 self.window().songQueue.addSong(self.result)
 
-                if len(self.window().songQueue.getQueue()) == 1:
+                if len(self.window().songQueue.getQueue()) == 1 and not self.window().mediaPlayer.currentSong:
                 # If this is the first song to queue, signal media player to start it
                     self.window().mediaPlayer.skipSong()
 
@@ -236,10 +238,12 @@ class WindowSearch(QWidget):
                 self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
 
             def clickedFavourite(self):
-                if self.favouriteButton.icon() == QIcon("icons/star.svg"):
-                    self.favouriteButton.seticon(QIcon("icons/star-yellow.svg"))
+                if self.favouriteButton.isFavourited:
+                    self.favouriteButton.isFavourited = False
+                    self.favouriteButton.setIcon(QIcon("icons/star.svg"))
                 else:
-                    self.favouriteButton.seticon(QIcon("icons/star.svg"))
+                    self.favouriteButton.isFavourited = True
+                    self.favouriteButton.setIcon(QIcon("icons/star-yellow.svg"))
                 DB.setFavouriteSong(self.result["song_id"])
 
             def addToPlaylist(self):
@@ -273,9 +277,12 @@ class WindowSearch(QWidget):
             self.clearResults()
             col = 0
             row = 0
-            for i in range(results):
+            for i in range(len(results)):
                 item = self.ResultsGridItem(results[i], self)
-                self.layout.addWidget(item, i // 4, i % 4)
+                self.layout.addWidget(item, i // 6, i % 6)
+            if results:
+                self.layout.setRowStretch(self.layout.rowCount(), 1)
+                self.layout.setColumnStretch(self.layout.columnCount(), 1)
             else:
                 label = QLabel("没有结果/No Result")
                 label.setStyleSheet("color: white")
@@ -292,28 +299,33 @@ class WindowSearch(QWidget):
                 self.setParent(parent)
                 self.result = result
 
+                self.setContentsMargins(0, 0, 0, 0)
                 # Button formatting
-                self.setFixedSize(300, 300)
+                self.setFixedSize(200, 240)
                 self.setAutoRaise(True)
                 # TODO: change with global themes
-                self.setStyleSheet("QToolButton:pressed { background-color: rgba(255, 255, 255, 0.1)} QToolButton { background-color: rgba(255, 255, 255, 0.05); border: 1px solid white}")
+                self.setStyleSheet("QToolButton:pressed { background-color: rgba(255, 255, 255, 0.1)} QToolButton { background-color: rgba(255, 255, 255, 0.05); border: 1px solid white; color: white}")
 
-                # Set layout
                 self.layout = QGridLayout()
+                self.layout.setContentsMargins(0, 0, 0, 0)
+                self.layout.setSpacing(0)
 
                 if result["type"] == "artists":
                     self.formattedImage(result["artist_path"])
                     self.formattedLabel(result["artist_name"])
                     
                     self.favouriteButton = QToolButton()
+                    self.favouriteButton.setStyleSheet("QToolButton:pressed { background-color: rgb(31, 41, 75)} QToolButton { background-color: rgb(25, 33, 60);}")
                     if self.result["favourited"] == 0:
+                        self.favouriteButton.isFavourited = False
                         self.favouriteButton.setIcon(QIcon("icons/star.svg"))
                     else:
-                        self.favouriteButton.setIcon(QIcon("icons/star-yelow.svg"))
+                        self.favouriteButton.isFavourited = True
+                        self.favouriteButton.setIcon(QIcon("icons/star-yellow.svg"))
                     self.favouriteButton.setIconSize(QSize(30, 30))
                     self.favouriteButton.setFixedSize(70, 70)
-                    self.favouriteButton.clicked.connect(lambda: self.clickedFavourite)
-                    self.layout.addWidget(self.favouriteButton, 1)
+                    self.favouriteButton.clicked.connect(self.clickedFavourite)
+                    self.layout.addWidget(self.favouriteButton, 0, 0, Qt.AlignRight | Qt.AlignTop)
                     self.clicked.connect(self.clickedArtist)
                 elif result["type"] == "languages":
                     self.formattedImage(result["language_path"])
@@ -323,31 +335,29 @@ class WindowSearch(QWidget):
                 self.setLayout(self.layout)
 
             def clickedFavourite(self):
-                if self.favouriteButton.icon() == QIcon("icons/star.svg"):
-                    self.favouriteButton.seticon(QIcon("icons/star-yellow.svg"))
+                if self.favouriteButton.isFavourited:
+                    self.favouriteButton.isFavourited = False
+                    self.favouriteButton.setIcon(QIcon("icons/star.svg"))
                 else:
-                    self.favouriteButton.seticon(QIcon("icons/star.svg"))
-                DB.setFavouriteArtists(self.result["artist_id"])
+                    self.favouriteButton.isFavourited = True
+                    self.favouriteButton.setIcon(QIcon("icons/star-yellow.svg"))
+                DB.setFavouriteArtist(self.result["artist_id"])
 
             def formattedImage(self, path):
-                image = QPixmap(path)
-                image.scaled(250, 250)
-                self.layout.addWidget(image, 0)
+                self.setIcon(QIcon(path))
+                self.setIconSize(QSize(180, 180))
 
             def formattedLabel(self, text):
-                label = QLabel(text)
                 font = QFont()
-                font.setPixelSize(30)
-                # TODO: change with global themes
-                label.setStyleSheet("color: white")
-                label.setAlignment(Qt.AlignCenter)
-                label.setFont(font)
-                self.layout.addWidget(label, 1)
+                font.setPixelSize(18)
+                self.setText(text)
+                self.setFont(font)
+                self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
             def clickedArtist(self):
                 self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.parent().parent().counter + 1, self.result))
                 self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
 
             def clickedLanguage(self):
-                self.window().content.addWidget(WindowSearch("搜索歌手/Artist Search", self, self.parent().parent().counter + 1, self.result))
+                self.window().content.addWidget(WindowSearch("搜索歌手/Artist Search", self, self.parent().parent().counter + 1, self.result, grid=True))
                 self.window().content.setCurrentIndex(self.parent().parent().counter + 1)
