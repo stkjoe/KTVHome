@@ -144,11 +144,12 @@ class WindowSearch(QWidget):
                     item.widget().deleteLater()
 
         def addResults(self, results):
+            self.results = results
             self.clearResults()
-            for i in results:
-                item = self.ResultsListItem(i, self)
-                self.layout.addWidget(item)
             if results:
+                for i in self.results:
+                    item = self.ResultsListItem(i, self)
+                    self.layout.addWidget(item)
                 self.layout.addStretch(1)
             else:
                 label = QLabel("没有结果/No Result")
@@ -222,6 +223,12 @@ class WindowSearch(QWidget):
                 self.layout.addWidget(labelQueue)
                 labelPlaylist = self.formattedLabel(QLabel(self.result["playlist_name"]))
                 self.layout.addWidget(labelPlaylist)
+                btnRemove = QToolButton()
+                btnRemove.setText("X")
+                btnRemove.setFixedSize(70, 70)
+                btnRemove.setStyleSheet("color: white")
+                btnRemove.clicked.connect(self.removePlaylist)
+                self.layout.addWidget(btnRemove)
 
             def formattedLabel(self, label):
                 font = QFont()
@@ -259,6 +266,11 @@ class WindowSearch(QWidget):
                 popup.resize(1366, 768)
                 popup.SIGNALS.CLOSE.connect(lambda: popup.close())
                 popup.show()
+
+            def removePlaylist(self):
+                DB.removePlaylist(self.result["playlist_id"])
+                self.window().content.currentWidget().results.results = self.window().content.currentWidget().results.results.remove(self.result)
+                self.window().content.currentWidget().results.addResults(self.window().content.currentWidget().results.results)
 
     class ResultsGrid(QScrollArea):
         def __init__(self, parent=None):

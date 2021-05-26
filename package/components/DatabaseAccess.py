@@ -130,6 +130,10 @@ def setFavouriteArtist(artist_id):
 def newPlaylist(name):
     execute("INSERT INTO playlists (playlist_name) VALUES (\"{}\")".format(name))
 
+# Function to remove playlist
+def removePlaylist(playlist_id):
+    execute("DELETE FROM playlists WHERE playlist_id={}".format(playlist_id))
+
 # Function for adding songs to existing playlists
 def addPlaylistSong(playlist, song):
     execute("INSERT INTO playlist_videos (playlist_id, song_id) VALUES ({}, {})".format(playlist, song))
