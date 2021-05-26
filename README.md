@@ -32,13 +32,14 @@ However, I do plan on making the software more flexible for all screens in the f
 Windows 10 is required for Tablet mode + on-screen keyboard
 
 ## Screenshots
-![Home Screen](screenshots\\home-page.jpg)
-![Grid Search](screenshots\\grid-search.jpg)
-![List Search](screenshots\\list-search.jpg)
-![Queue](screenshots\\queue.jpg)
+![Home Screen](screenshots\home-page.jpg)
+![Grid Search](screenshots\grid-search.jpg)
+![List Search](screenshots\list-search.jpg)
+![Queue](screenshots\queue.jpg)
 
 ## Future ToDos (order by priority):
 - [ ] Config File
+- [ ] Visual representation of song progress
 - [ ] Proper Resize
 - [ ] Proper commenting of labelled files
 - [ ] Statistics Window
