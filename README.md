@@ -3,6 +3,8 @@
 ## What is this?
 When working on constructing the home network for my parents new home build, I made an effort to upgrade their Karaoke PC. After a brief look, I have discovered that the Karaoke software used is a propietary one, which doesn't allow user-submitted songs. Because of that, I wanted to create a new Karaoke software for my parents to use that's customizable to our needs. KTVHome is a result of that.
 
+Bear in mind I have no commercial software development experience whatsoever (all knowledge from University + free time) so I may have made a few bad practices but I am willing to rectify them.
+
 ## How do I use this?
 You need exactly the same set-up as I do because I have tailored the software to my needs. Those needs being:
 * Chinese and English UI at the same time
@@ -32,10 +34,10 @@ However, I do plan on making the software more flexible for all screens in the f
 Windows 10 is required for Tablet mode + on-screen keyboard
 
 ## Screenshots
-![Home Screen](screenshots\home-page.jpg)
-![Grid Search](screenshots\grid-search.jpg)
-![List Search](screenshots\list-search.jpg)
-![Queue](screenshots\queue.jpg)
+![Home Screen](https://raw.githubusercontent.com/stkjoe/KTVHome/main/screenshots/home-page.jpg)
+![Grid Search](https://raw.githubusercontent.com/stkjoe/KTVHome/main/screenshots/grid-search.jpg)
+![List Search](https://raw.githubusercontent.com/stkjoe/KTVHome/main/screenshots/list-search.jpg)
+![Queue](https://raw.githubusercontent.com/stkjoe/KTVHome/main/screenshots/queue.jpg)
 
 ## Future ToDos (order by priority):
 - [ ] Config File
