@@ -129,6 +129,11 @@ def setFavouriteArtist(artist_id):
 # Function for adding playlists
 def newPlaylist(name):
     execute("INSERT INTO playlists (playlist_name) VALUES (\"{}\")".format(name))
+    return checkPlaylist(name)
+
+# Function for checking if a playlist of the same name exists
+def checkPlaylist(playlist_name):
+    return fetchResults("SELECT 'playlists', playlist_id FROM playlists WHERE playlist_name = '{}'".format(playlist_name))
 
 # Function to remove playlist
 def removePlaylist(playlist_id):

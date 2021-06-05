@@ -269,7 +269,7 @@ class WindowSearch(QWidget):
 
             def removePlaylist(self):
                 DB.removePlaylist(self.result["playlist_id"])
-                self.window().content.currentWidget().results.results = self.window().content.currentWidget().results.results.remove(self.result)
+                self.window().content.currentWidget().results.results.remove(self.result)
                 self.window().content.currentWidget().results.addResults(self.window().content.currentWidget().results.results)
 
     class ResultsGrid(QScrollArea):
@@ -282,6 +282,7 @@ class WindowSearch(QWidget):
             self.setWidgetResizable(True)
             self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
+            # Add Touch Gestures to menu.
             QScroller.grabGesture(self, QScroller.LeftMouseButtonGesture)
 
             self.layout = QGridLayout()
