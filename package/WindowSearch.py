@@ -5,8 +5,6 @@ from PySide6.QtWidgets import QFrame, QGridLayout, QLabel, QLineEdit, QScroller,
 import package.components.DatabaseAccess as DB
 from package.components.PlaylistPopup import PlaylistPopup
 
-#TODO: comment properly
-
 class WindowSearch(QWidget):
     def __init__(self, heading, parent=None, counter=0, pastResults={}, grid=False):
         QWidget.__init__(self)
@@ -89,6 +87,7 @@ class WindowSearch(QWidget):
         self.setLayout(layout)
 
     def updateResults(self):
+        # Depending on heading, update page
         if self.heading == "播放清单/Playlists":
             self.results.addResults(DB.getPlaylists(self.searchBar.text()))
         elif self.heading == "最喜欢的歌曲/Favourite Songs":
@@ -112,12 +111,15 @@ class WindowSearch(QWidget):
                 self.results.addResults(DB.getSongTitles(self.searchBar.text()))
 
     def goBack(self):
+        # Move back in the QStackedWidget index
         if self.counter:
             self.window().content.setCurrentIndex(self.counter - 1)
             self.window().content.removeWidget(self)
 
     class ResultsList(QScrollArea):
         def __init__(self, parent=None):
+            # List View of results
+            # Only Title Search and Playlist Search use this
             QScrollArea.__init__(self)
             self.setParent(parent)
             
@@ -126,24 +128,30 @@ class WindowSearch(QWidget):
             self.setWidgetResizable(True)
             self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
+            # Add touch screen control to QScrollArea
             QScroller.grabGesture(self, QScroller.LeftMouseButtonGesture)
 
+            # Set layout settings of the QScrollArea
             self.layout = QVBoxLayout()
             self.layout.setContentsMargins(0, 0, 0, 0)
             self.layout.setSpacing(0)
 
+            # A separate QWidget is needed to properly use QScrollArea
             frame = QFrame()
             frame.setLayout(self.layout)
 
             self.setWidget(frame)
 
         def clearResults(self):
+            # Clear the results in the list
             while self.layout.count():
                 item = self.layout.takeAt(0)
                 if item.widget() is not None:
                     item.widget().deleteLater()
 
         def addResults(self, results):
+            # Add the results to the list
+            # results (list): list of python dict representing results details (playlist or song search)
             self.results = results
             self.clearResults()
             if results:
@@ -152,6 +160,7 @@ class WindowSearch(QWidget):
                     self.layout.addWidget(item)
                 self.layout.addStretch(1)
             else:
+                # If the results are empty, display no result
                 label = QLabel("没有结果/No Result")
                 label.setStyleSheet("color: white")
                 label.setAlignment(Qt.AlignCenter)
@@ -163,6 +172,8 @@ class WindowSearch(QWidget):
 
         class ResultsListItem(QToolButton):
             def __init__(self, result, parent=None):
+                # An item of ResultsList
+                # result: (dict) represents details (playlist or song search)
                 QToolButton.__init__(self)
                 self.setParent(parent)
                 self.result = result
@@ -179,6 +190,7 @@ class WindowSearch(QWidget):
                 self.layout.setContentsMargins(0, 0, 0, 0)
                 self.layout.setSpacing(0)
 
+                # Depending on result type, add action when the item is clicked
                 if result["type"] == "songs":
                     self.formatTitle()
                     self.clicked.connect(self.clickedSong)
@@ -188,27 +200,42 @@ class WindowSearch(QWidget):
                 self.setLayout(self.layout)
 
             def formatTitle(self):
+                # Format the title for the ResultsList
+
+                # Add space to the beginning of the ResultsListItem
                 labelQueue = self.formattedLabel(QLabel("", self))
                 labelQueue.setFixedWidth(70)
                 labelQueue.setAlignment(Qt.AlignCenter)
                 self.layout.addWidget(labelQueue)
+
+                # Artist name
                 labelArtist = self.formattedLabel(QLabel(self.result["artist_name"]))
                 labelArtist.setFixedWidth(300)
                 self.layout.addWidget(labelArtist)
+
+                # Song title
                 labelTitle = self.formattedLabel(QLabel(self.result["song_title"]))
                 self.layout.addWidget(labelTitle)
+
                 # Add buttons for favourites and playlists
+
+                # Favourite button
                 self.favouriteButton = QToolButton()
+                
+                # Toggle Favourite Icon depending on DB
                 if self.result["favourited"] == 0:
                     self.favouriteButton.isFavourited = False
                     self.favouriteButton.setIcon(QIcon("icons/star.svg"))
                 else:
                     self.favouriteButton.isFavourited = True
                     self.favouriteButton.setIcon(QIcon("icons/star-yellow.svg"))
+
                 self.favouriteButton.setIconSize(QSize(30, 30))
                 self.favouriteButton.setFixedSize(70, 70)
                 self.favouriteButton.clicked.connect(self.clickedFavourite)
                 self.layout.addWidget(self.favouriteButton)
+
+                # Playlist button
                 playlistButton = QToolButton()
                 playlistButton.setIcon(QIcon("icons/music-player-2.svg"))
                 playlistButton.setIconSize(QSize(30, 30))
@@ -217,12 +244,17 @@ class WindowSearch(QWidget):
                 self.layout.addWidget(playlistButton)
 
             def formatPlaylist(self):
+                # Add space to beginning of LisItem
                 labelQueue = self.formattedLabel(QLabel("", self))
                 labelQueue.setFixedWidth(70)
                 labelQueue.setAlignment(Qt.AlignCenter)
                 self.layout.addWidget(labelQueue)
+
+                # Playlist name
                 labelPlaylist = self.formattedLabel(QLabel(self.result["playlist_name"]))
                 self.layout.addWidget(labelPlaylist)
+
+                # Remove playlist button
                 btnRemove = QToolButton()
                 btnRemove.setText("X")
                 btnRemove.setFixedSize(70, 70)
@@ -231,6 +263,7 @@ class WindowSearch(QWidget):
                 self.layout.addWidget(btnRemove)
 
             def formattedLabel(self, label):
+                # Format a label
                 font = QFont()
                 font.setPixelSize(25)
                 # TODO: change with global themes
@@ -240,19 +273,26 @@ class WindowSearch(QWidget):
                 return label
 
             def clickedSong(self):
+                # Called when a song is clicked on
+
+                # Add to queue
                 self.window().songQueue.addSong(self.result)
 
                 if len(self.window().songQueue.getQueue()) < 2:
                     if not self.window().mediaPlayer.currentSong:
                         # If this is the first song to queue, signal media player to start it
                         self.window().mediaPlayer.skipSong()
+                    # Update scrolling text marquee
                     self.window().mediaPlayer.updateMarquee()
 
             def clickedPlaylist(self):
+                # Called when a playlist is clicked on
                 self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.window().content.currentWidget().counter + 1, self.result))
                 self.window().content.setCurrentIndex(self.window().content.currentWidget().counter + 1)
 
             def clickedFavourite(self):
+                # Toggle Icon and DB state of song being favourited
+                # For songs only
                 if self.favouriteButton.isFavourited:
                     self.favouriteButton.isFavourited = False
                     self.favouriteButton.setIcon(QIcon("icons/star.svg"))
@@ -262,12 +302,14 @@ class WindowSearch(QWidget):
                 DB.setFavouriteSong(self.result["song_id"])
 
             def addToPlaylist(self):
+                # Opens a popup for adding songs to playlists
                 popup = PlaylistPopup(self.result, self.window())
                 popup.resize(1366, 768)
                 popup.SIGNALS.CLOSE.connect(lambda: popup.close())
                 popup.show()
 
             def removePlaylist(self):
+                # Remove a playlist
                 DB.removePlaylist(self.result["playlist_id"])
                 self.window().content.currentWidget().results.results.remove(self.result)
                 self.window().content.currentWidget().results.addResults(self.window().content.currentWidget().results.results)
@@ -285,22 +327,27 @@ class WindowSearch(QWidget):
             # Add Touch Gestures to menu.
             QScroller.grabGesture(self, QScroller.LeftMouseButtonGesture)
 
+            # Layout settings
             self.layout = QGridLayout()
             self.layout.setContentsMargins(0, 0, 0, 0)
             self.layout.setSpacing(0)
 
+            # QScrollArea requires a separate QWidget to work properly
             frame = QFrame()
             frame.setLayout(self.layout)
 
             self.setWidget(frame)
 
         def clearResults(self):
+            # Clear the results in the list
             while self.layout.count():
                 item = self.layout.takeAt(0)
                 if item.widget() is not None:
                     item.widget().deleteLater()
                 
         def addResults(self, results):
+            # Add the results to the list
+            # results (list): list of python dict representing results details (playlist or song search)
             self.clearResults()
             for i in range(len(results)):
                 item = self.ResultsGridItem(results[i], self)
@@ -309,6 +356,7 @@ class WindowSearch(QWidget):
                 self.layout.setRowStretch(self.layout.rowCount(), 1)
                 self.layout.setColumnStretch(self.layout.columnCount(), 1)
             else:
+                # If the results are empty, display no result
                 label = QLabel("没有结果/No Result")
                 label.setStyleSheet("color: white")
                 label.setAlignment(Qt.AlignCenter)
@@ -331,16 +379,21 @@ class WindowSearch(QWidget):
                 # TODO: change with global themes
                 self.setStyleSheet("QToolButton:pressed { background-color: rgba(255, 255, 255, 0.1)} QToolButton { background-color: rgba(255, 255, 255, 0.05); border: 1px solid white; color: white}")
 
+                # Set layout settings
                 self.layout = QGridLayout()
                 self.layout.setContentsMargins(0, 0, 0, 0)
                 self.layout.setSpacing(0)
 
                 if result["type"] == "artists":
+                    # Artist image
                     self.formattedImage(self.window().artistPath + result["artist_path"])
                     self.formattedLabel(result["artist_name"])
                     
+                    # Favourite button
                     self.favouriteButton = QToolButton()
                     self.favouriteButton.setStyleSheet("QToolButton:pressed { background-color: rgb(31, 41, 75)} QToolButton { background-color: rgb(25, 33, 60);}")
+
+                    # Toggle Favourite Icon depending on DB
                     if self.result["favourited"] == 0:
                         self.favouriteButton.isFavourited = False
                         self.favouriteButton.setIcon(QIcon("icons/star.svg"))
@@ -351,8 +404,10 @@ class WindowSearch(QWidget):
                     self.favouriteButton.setFixedSize(70, 70)
                     self.favouriteButton.clicked.connect(self.clickedFavourite)
                     self.layout.addWidget(self.favouriteButton, 0, 0, Qt.AlignRight | Qt.AlignTop)
+
                     self.clicked.connect(self.clickedArtist)
                 elif result["type"] == "languages":
+                    # Language image
                     self.formattedImage(self.window().languagePath + result["language_path"])
                     self.formattedLabel(result["language_name"])
                     self.clicked.connect(self.clickedLanguage)
@@ -360,6 +415,8 @@ class WindowSearch(QWidget):
                 self.setLayout(self.layout)
 
             def clickedFavourite(self):
+                # Toggle Icon and DB state of song being favourited
+                # For artists only
                 if self.favouriteButton.isFavourited:
                     self.favouriteButton.isFavourited = False
                     self.favouriteButton.setIcon(QIcon("icons/star.svg"))
@@ -369,10 +426,12 @@ class WindowSearch(QWidget):
                 DB.setFavouriteArtist(self.result["artist_id"])
 
             def formattedImage(self, path):
+                # Format an image given the path
                 self.setIcon(QIcon(path))
                 self.setIconSize(QSize(180, 180))
 
             def formattedLabel(self, text):
+                # Format a label given text
                 font = QFont()
                 font.setPixelSize(18)
                 self.setText(text)
@@ -380,10 +439,11 @@ class WindowSearch(QWidget):
                 self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
             def clickedArtist(self):
+                # Called when an Artist is clicked on
                 self.window().content.addWidget(WindowSearch("搜索全部/Search", self, self.window().content.currentWidget().counter + 1, self.result))
                 self.window().content.setCurrentIndex(self.window().content.currentWidget().counter + 1)
 
             def clickedLanguage(self):
-                print(self.parent())
+                # Called when a Language is clicked on
                 self.window().content.addWidget(WindowSearch("搜索歌手/Artist Search", self, self.window().content.currentWidget().counter + 1, self.result, grid=True))
                 self.window().content.setCurrentIndex(self.window().content.currentWidget().counter + 1)

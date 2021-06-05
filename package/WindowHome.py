@@ -89,42 +89,52 @@ class WindowHome(QWidget):
         # Pythonic switch-case
 
         def getStackWidget(self):
+            # Returns a newly initialised QStackedWidget
             return QStackedWidget(self)
 
         def buttonTitle(self):
+            # Action when the Title Search button is clicked.
             stack = getStackWidget(self)
             stack.addWidget(WindowSearch("搜索全部/Search", stack))
             self.window().changeWindow(stack)
 
         def buttonArtist(self):
+            # Action when the Artist Search button is clicked.
             stack = getStackWidget(self)
             stack.addWidget(WindowSearch("搜索歌手/Artist Search", stack, grid=True))
             self.window().changeWindow(stack)
 
         def buttonLanguage(self):
+            # Action when the Language Search button is clicked.
             stack = getStackWidget(self)
             stack.addWidget(WindowSearch("搜索语言/Language Search", stack, grid=True))
             self.window().changeWindow(stack)
 
         def buttonPlaylist(self):
+            # Action when the Playlist List button is clicked.
             stack = getStackWidget(self)
             stack.addWidget(WindowSearch("播放清单/Playlists", stack))
             self.window().changeWindow(stack)
 
         def buttonFavouriteA(self):
+            # Action when the Favourite Songs button is clicked.
             stack = getStackWidget(self)
             stack.addWidget(WindowSearch("最喜欢的歌曲/Favourite Songs", stack))
             self.window().changeWindow(stack)
 
         def buttonFavouriteB(self):
+            # Action when the Favourite Artists button is clicked.
             stack = getStackWidget(self)
             stack.addWidget(WindowSearch("最喜欢的歌手/Favourite Artists", stack, grid=True))
             self.window().changeWindow(stack)
 
         def buttonQueue(self):
+            # Action when the Queue button is clicked.
             self.window().changeWindow(WindowQueue(self))
 
         def buttonStatistics(self):
+            # Action when the Statistics button is clicked.
+            # TODO: Implement in future update
             pass
 
         switcher = {
