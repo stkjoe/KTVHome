@@ -31,7 +31,7 @@ However, I do plan on making the software more flexible for all screens in the f
 * <a href="https://pypi.org/project/python-vlc/">python-vlc</a>
 * <a href="https://www.python.org/downloads/">Python 3</a>
 * <a href="https://www.microsoft.com/en-au/software-download/windows10">Windows 10</a>
-Windows 10 is required for Tablet mode + on-screen keyboard
+    * Windows 10 is required for Tablet mode + on-screen keyboard
 
 ## Screenshots
 ![Home Screen](https://raw.githubusercontent.com/stkjoe/KTVHome/main/screenshots/home-page.jpg)
@@ -41,9 +41,12 @@ Windows 10 is required for Tablet mode + on-screen keyboard
 
 ## Future ToDos (order by priority):
 - [ ] Config File
+    * Language
+    * Size
+    * Preferred Screen
 - [ ] Visual representation of song progress
 - [ ] Proper Resize
-- [ ] Proper commenting of labelled files
+- [ ] Create Custom Icons to use
 - [ ] Statistics Window
 - [ ] Themes
 
