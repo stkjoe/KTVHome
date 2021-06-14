@@ -45,6 +45,7 @@ However, I do plan on making the software more flexible for all screens in the f
     * Size
     * Preferred Screen
 - [ ] Visual representation of song progress
+- [ ] Song Management Panel
 - [ ] Proper Resize
 - [ ] Create Custom Icons to use
 - [ ] Statistics Window
